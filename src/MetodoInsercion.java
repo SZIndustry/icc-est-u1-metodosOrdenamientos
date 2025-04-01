@@ -1,44 +1,77 @@
 public class MetodoInsercion {
+    private int comparaciones = 0;
+    private int cambios = 0;
 
-    public void ordenar(int[] array, boolean conditional) {
-        if (conditional) {
-            for (int i = 1; i < array.length; i++) {
-                int aux = array[i];
-                int j = i - 1;
-    
-                while (j >= 0 && aux < array[j]) {
-                    array[j + 1] = array[j];
-                    j = j - 1;
-                }
-                array[j + 1] = aux; 
-            }
+    public void ordenar(int[] array, boolean conditional, boolean pasos) {
+        comparaciones = 0;
+        cambios = 0;
+
+        if (pasos) {
+            System.out.print("Arreglo original -> ");
+            imprimirArreglo(array);
+            System.out.println();
         }
 
-        else {
-            int n = array.length;
-            for (int i = 1; i < n; i++) {
-                int aux = array[i];
-                int j = i - 1;
+        for (int i = 1; i < array.length; i++) {
+            int aux = array[i];
+            int j = i - 1;
+            String tipoOrden = conditional ? "ascendente" : "descendente";
 
-                System.out.println("i: " + i + ", j: " + j + ", aux: " + aux);
-                while (j >= 0 && array[j] > aux) {
-                    System.out.println("Compara aux: " + aux + " con array[" + j + "]: " + array[j]);
+            if (pasos) {
+                System.out.println("Iteración " + i + " (Orden " + tipoOrden + ")");
+                System.out.println("Elemento actual -> " + aux + " en posición " + i);
+            }
+
+            while (j >= 0) {
+                comparaciones++;
+                boolean condicion = conditional ? (aux < array[j]) : (aux > array[j]);
+                
+                if (pasos) {
+                    System.out.print("Comparación " + comparaciones + ": " + aux + 
+                                   (conditional ? " < " : " > ") + array[j] + "? " + 
+                                   (condicion ? "SÍ" : "NO"));
+                }
+
+                if (condicion) {
+                    cambios++;
+                    if (pasos) {
+                        System.out.println(" - Mover " + array[j] + " a posición " + (j + 1));
+                    }
                     array[j + 1] = array[j];
-                    System.out.println("Mueve array[" + j + "] a array[" + (j + 1) + "]");
                     j--;
+                } else {
+                    if (pasos) {
+                        System.out.println();
+                    }
+                    break;
                 }
+            }
+
+            if (j + 1 != i) {
                 array[j + 1] = aux;
-                System.out.println("Inserta aux: " + aux + " en la posición " + (j + 1));
-                imprimirArreglo(array);
+                if (pasos) {
+                    System.out.println("Insertar " + aux + " en posición " + (j + 1));
+                    System.out.print("Estado actual -> ");
+                    imprimirArreglo(array);
+                    System.out.println();
+                }
             }
         }
 
+        if (pasos) {
+            System.out.println("---FIN DEL METODO---");
+            System.out.println();
+            System.out.println("Comparaciones Totales -> " + comparaciones);
+            System.out.println("Cambios Totales -> " + cambios);
         }
+    }
 
     public void imprimirArreglo(int[] array) {
-        for (int elemento : array) {
-            System.out.print(elemento + ", ");                      
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i]);
+            if (i < array.length - 1) {
+                System.out.print(" ");
+            }
         }
-        System.out.println();
     }
 }
